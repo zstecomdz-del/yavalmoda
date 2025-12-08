@@ -58,7 +58,7 @@ function App() {
     <>
       {/* Announcement Bar */}
       <div className="announcement-bar">
-        <span>Livraison 58 Wilaya</span>
+        <span>Livraison 69 Wilaya</span>
       </div>
 
       {/* Header */}
