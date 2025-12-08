@@ -8,6 +8,13 @@ const colors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f', image: '/images/blue.png' },
 ]
 
+// Extra gallery images
+const galleryImages = [
+  '/images/hoodie.jpeg',
+  '/images/pants.jpeg',
+  '/images/combined.jpeg',
+]
+
 // Available sizes
 const sizes = ['S', 'M', 'L', 'XL']
 
@@ -18,7 +25,11 @@ function App() {
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedSize, setSelectedSize] = useState('M')
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState(null)
   const videoRef = useRef(null)
+
+  // Get the current main image (either selected gallery image or color image)
+  const currentMainImage = selectedGalleryImage || selectedColor.image
 
   const handleVideoPlay = () => {
     if (videoRef.current) {
@@ -45,6 +56,11 @@ function App() {
 
   return (
     <>
+      {/* Announcement Bar */}
+      <div className="announcement-bar">
+        <span>Livraison 58 Wilaya</span>
+      </div>
+
       {/* Header */}
       <header className="header">
         <div className="header-logo">
@@ -60,7 +76,7 @@ function App() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <span className="hero-tagline">New Arrival 2024</span>
+          <span className="hero-tagline">New Arrival 2025</span>
           <h1 className="hero-title">
             Step Into<br /><em>Style</em>
           </h1>
@@ -120,19 +136,33 @@ function App() {
           {/* Product Gallery */}
           <div className="product-gallery">
             <div className="gallery-thumbnails">
+              {/* Color thumbnails */}
               {colors.map((color) => (
                 <button
                   key={color.id}
-                  className={`gallery-thumb ${selectedColor.id === color.id ? 'active' : ''}`}
-                  onClick={() => setSelectedColor(color)}
+                  className={`gallery-thumb ${selectedColor.id === color.id && !selectedGalleryImage ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedColor(color)
+                    setSelectedGalleryImage(null)
+                  }}
                 >
                   <img src={color.image} alt={color.name} />
+                </button>
+              ))}
+              {/* Extra gallery images */}
+              {galleryImages.map((img, index) => (
+                <button
+                  key={`gallery-${index}`}
+                  className={`gallery-thumb ${selectedGalleryImage === img ? 'active' : ''}`}
+                  onClick={() => setSelectedGalleryImage(img)}
+                >
+                  <img src={img} alt={`Product view ${index + 1}`} />
                 </button>
               ))}
             </div>
             <div className="gallery-main">
               <img
-                src={selectedColor.image}
+                src={currentMainImage}
                 alt={selectedColor.name}
               />
             </div>
@@ -302,7 +332,7 @@ function App() {
         </div>
         <div className="footer-bottom">
           <p className="footer-copyright">
-            &copy; 2024 YA VALMODA. All rights reserved.
+            &copy; 2025 YA VALMODA. All rights reserved.
           </p>
         </div>
       </footer>

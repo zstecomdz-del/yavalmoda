@@ -1,9 +1,32 @@
 /* ===========================
+   ANNOUNCEMENT BAR
+   =========================== */
+.announcement-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: var(--color-charcoal);
+  color: var(--color-cream);
+  text-align: center;
+  padding: var(--space-xs) var(--space-sm);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.announcement-bar span {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ===========================
    HEADER STYLES
    =========================== */
 .header {
   position: fixed;
-  top: 0;
+  top: 32px;
   left: 0;
   right: 0;
   z-index: 100;
