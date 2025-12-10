@@ -355,6 +355,15 @@
   align-items: baseline;
   gap: var(--space-xs);
   margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.price-old {
+  color: #c44;
+  text-decoration: line-through;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-right: var(--space-xs);
 }
 
 .price-amount {

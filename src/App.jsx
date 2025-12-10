@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import './App.css'
+import OrderForm from './components/OrderForm'
 
 // Product colors with their images
 const colors = [
@@ -26,6 +27,7 @@ function App() {
   const [selectedSize, setSelectedSize] = useState('M')
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [selectedGalleryImage, setSelectedGalleryImage] = useState(null)
+  const [showOrderForm, setShowOrderForm] = useState(false)
   const videoRef = useRef(null)
 
   // Get the current main image (either selected gallery image or color image)
@@ -43,15 +45,7 @@ function App() {
   }
 
   const handleOrder = () => {
-    const message = encodeURIComponent(
-      `Hello YA VALMODA! I'd like to order:\n\n` +
-      `Product: Premium Hoodie + Track Pants Pack\n` +
-      `Color: ${selectedColor.name}\n` +
-      `Size: ${selectedSize}\n` +
-      `Price: 3,900 DA\n\n` +
-      `Please confirm availability.`
-    )
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank')
+    setShowOrderForm(true)
   }
 
   return (
@@ -180,6 +174,7 @@ function App() {
             </p>
 
             <div className="product-price">
+              <span className="price-old">4,500 DA</span>
               <span className="price-amount">3,900</span>
               <span className="price-currency">DA</span>
               <span className="price-note">Full Pack</span>
@@ -221,7 +216,7 @@ function App() {
 
             {/* Order Button */}
             <button className="order-btn" onClick={handleOrder}>
-              Order via WhatsApp
+              Order Now
             </button>
           </div>
         </div>
@@ -336,6 +331,11 @@ function App() {
           </p>
         </div>
       </footer>
+
+      {/* Order Form Modal */}
+      {showOrderForm && (
+        <OrderForm onClose={() => setShowOrderForm(false)} />
+      )}
     </>
   )
 }

@@ -1,0 +1,556 @@
+/* ===========================
+   ORDER FORM OVERLAY
+   =========================== */
+.order-form-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(26, 24, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ===========================
+   ORDER FORM CONTAINER
+   =========================== */
+.order-form-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--color-cream);
+  padding: var(--space-lg) var(--space-md);
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for form */
+.order-form-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-form-container::-webkit-scrollbar-track {
+  background: var(--color-sand);
+}
+
+.order-form-container::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 3px;
+}
+
+/* ===========================
+   CLOSE BUTTON
+   =========================== */
+.order-form-close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.order-form-close:hover {
+  transform: rotate(90deg);
+}
+
+.order-form-close span {
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background: var(--color-charcoal);
+  transition: background var(--transition-fast);
+}
+
+.order-form-close span:first-child {
+  transform: rotate(45deg);
+}
+
+.order-form-close span:last-child {
+  transform: rotate(-45deg);
+}
+
+.order-form-close:hover span {
+  background: var(--color-accent);
+}
+
+/* ===========================
+   FORM HEADER
+   =========================== */
+.order-form-header {
+  text-align: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-sand);
+}
+
+.order-form-tagline {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.order-form-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--color-charcoal);
+}
+
+.order-form-title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ===========================
+   FORM STYLES
+   =========================== */
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.form-group label strong {
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
+
+/* Input Fields */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--color-charcoal);
+  background: var(--color-warm-white);
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.form-group input::placeholder {
+  color: var(--color-muted);
+  font-weight: 300;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-charcoal);
+  background: var(--color-cream);
+}
+
+/* Select Wrapper */
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--color-muted);
+  border-bottom: 2px solid var(--color-muted);
+  pointer-events: none;
+  transition: border-color var(--transition-fast);
+}
+
+.select-wrapper:focus-within::after {
+  border-color: var(--color-charcoal);
+}
+
+.form-group select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+}
+
+/* Error States */
+.form-group.has-error input,
+.form-group.has-error select {
+  border-color: #c44;
+  background: #fef8f8;
+}
+
+.error-text {
+  font-size: 0.75rem;
+  color: #c44;
+  font-weight: 400;
+}
+
+/* ===========================
+   DELIVERY OPTIONS
+   =========================== */
+.delivery-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.delivery-option {
+  padding: var(--space-sm);
+  background: var(--color-warm-white);
+  border: 2px solid transparent;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.delivery-option:hover {
+  border-color: var(--color-sand);
+}
+
+.delivery-option.active {
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
+}
+
+.delivery-option-title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-charcoal);
+  margin-bottom: 0.2rem;
+  transition: color var(--transition-fast);
+}
+
+.delivery-option.active .delivery-option-title {
+  color: var(--color-cream);
+}
+
+.delivery-option-desc {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  letter-spacing: 0.05em;
+  transition: color var(--transition-fast);
+}
+
+.delivery-option.active .delivery-option-desc {
+  color: rgba(250, 248, 245, 0.7);
+}
+
+/* ===========================
+   COLOR SELECTOR
+   =========================== */
+.color-selector-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.color-option {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.color-option::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.color-option:hover::after {
+  border-color: var(--color-sand);
+}
+
+.color-option.active::after {
+  border-color: var(--color-charcoal);
+}
+
+/* ===========================
+   QUANTITY SELECTOR
+   =========================== */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-warm-white);
+  padding: 0.5rem;
+  width: fit-content;
+}
+
+.quantity-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream);
+  border: 1px solid var(--color-sand);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
+}
+
+.quantity-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.quantity-minus,
+.quantity-plus {
+  position: relative;
+  width: 14px;
+  height: 2px;
+  background: var(--color-charcoal);
+  transition: background var(--transition-fast);
+}
+
+.quantity-btn:hover:not(:disabled) .quantity-minus,
+.quantity-btn:hover:not(:disabled) .quantity-plus {
+  background: var(--color-cream);
+}
+
+.quantity-plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  width: 14px;
+  height: 2px;
+  background: inherit;
+}
+
+.quantity-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color-charcoal);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* ===========================
+   ORDER SUMMARY
+   =========================== */
+.order-summary {
+  margin-top: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--color-warm-white);
+  border-left: 3px solid var(--color-charcoal);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.summary-row.total {
+  padding-top: 0.6rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid var(--color-sand);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-charcoal);
+}
+
+.summary-row.total span:last-child {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Promo Price Styling */
+.price-with-promo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.old-price {
+  color: #c44;
+  text-decoration: line-through;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* ===========================
+   SUBMIT BUTTON
+   =========================== */
+.submit-btn {
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-charcoal);
+  color: var(--color-cream);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--color-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(26, 24, 23, 0.25);
+}
+
+.submit-btn:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit-btn.submitting {
+  pointer-events: none;
+}
+
+.submit-btn.submitting span {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===========================
+   RESPONSIVE STYLES
+   =========================== */
+@media (max-width: 768px) {
+  .order-form-container {
+    padding: var(--space-md) var(--space-sm);
+    max-height: 85vh;
+  }
+
+  .order-form-title {
+    font-size: 1.8rem;
+  }
+
+  .delivery-options {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-option {
+    padding: 0.8rem;
+  }
+
+  .delivery-option-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-form-overlay {
+    padding: var(--space-xs);
+    align-items: flex-end;
+  }
+
+  .order-form-container {
+    max-height: 90vh;
+    border-radius: 0;
+    animation: slideInUp 0.35s ease-out;
+  }
+
+  .order-form-header {
+    margin-bottom: var(--space-sm);
+  }
+
+  .order-form-title {
+    font-size: 1.6rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .color-option {
+    width: 38px;
+    height: 38px;
+  }
+
+  .quantity-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .quantity-value {
+    font-size: 1.3rem;
+    min-width: 40px;
+  }
+}
