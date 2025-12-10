@@ -426,6 +426,30 @@
 }
 
 /* ===========================
+   STATUS MESSAGES
+   =========================== */
+.status-message {
+  padding: var(--space-sm);
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.status-message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.status-message.error {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+/* ===========================
    SUBMIT BUTTON
    =========================== */
 .submit-btn {

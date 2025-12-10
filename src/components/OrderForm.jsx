@@ -81,8 +81,8 @@ const productColors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f' },
 ]
 
-// WhatsApp configuration
-const WHATSAPP_NUMBER = '213798700447'
+// Web3Forms configuration
+const WEB3FORMS_KEY = 'f9ce567a-2baa-4857-90c4-e8750b9f18cd'
 
 function OrderForm({ onClose }) {
   const [formData, setFormData] = useState({
@@ -96,6 +96,7 @@ function OrderForm({ onClose }) {
 
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null) // 'success' | 'error' | null
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -137,37 +138,58 @@ function OrderForm({ onClose }) {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!validateForm()) return
 
     setIsSubmitting(true)
+    setSubmitStatus(null)
 
     const selectedWilaya = wilayas.find(w => w.code === formData.wilaya)
     const selectedColor = productColors.find(c => c.id === formData.color)
     const totalPrice = 3900 * formData.quantity
     const deliveryLabel = formData.deliveryType === 'office' ? 'Bureau (Office)' : 'Domicile (Home)'
 
-    const message = encodeURIComponent(
-      `Salam! New Order from YA VALMODA:\n\n` +
-      `Name: ${formData.name}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Wilaya: ${selectedWilaya?.code} - ${selectedWilaya?.name}\n` +
-      `Delivery: ${deliveryLabel}\n\n` +
-      `Product: Premium Hoodie + Track Pants Pack\n` +
-      `Color: ${selectedColor?.name}\n` +
-      `Quantity: ${formData.quantity}\n` +
-      `Total: ${totalPrice.toLocaleString()} DA\n\n` +
-      `Please confirm my order!`
-    )
+    const orderDetails = {
+      access_key: WEB3FORMS_KEY,
+      subject: `New Order - YA VALMODA - ${formData.name}`,
+      from_name: 'YA VALMODA Orders',
+      name: formData.name,
+      phone: formData.phone,
+      wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
+      delivery_type: deliveryLabel,
+      product: 'Premium Hoodie + Track Pants Pack',
+      color: selectedColor?.name,
+      quantity: formData.quantity,
+      total_price: `${totalPrice.toLocaleString()} DA`,
+      message: `New order received from ${formData.name}`,
+    }
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank')
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderDetails),
+      })
 
-    setTimeout(() => {
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitStatus('success')
+        setTimeout(() => {
+          if (onClose) onClose()
+        }, 2000)
+      } else {
+        setSubmitStatus('error')
+      }
+    } catch (error) {
+      setSubmitStatus('error')
+    } finally {
       setIsSubmitting(false)
-      if (onClose) onClose()
-    }, 1000)
+    }
   }
 
   const selectedColorData = productColors.find(c => c.id === formData.color)
@@ -323,13 +345,25 @@ function OrderForm({ onClose }) {
             </div>
           </div>
 
+          {/* Status Messages */}
+          {submitStatus === 'success' && (
+            <div className="status-message success">
+              Order sent successfully! Check your email.
+            </div>
+          )}
+          {submitStatus === 'error' && (
+            <div className="status-message error">
+              Failed to send order. Please try again.
+            </div>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
             className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
-            disabled={isSubmitting}
+            disabled={isSubmitting || submitStatus === 'success'}
           >
-            <span>{isSubmitting ? 'Processing...' : 'Confirm Order via WhatsApp'}</span>
+            <span>{isSubmitting ? 'Sending...' : submitStatus === 'success' ? 'Order Sent!' : 'Confirm Order'}</span>
           </button>
         </form>
       </div>
