@@ -27,7 +27,6 @@ function App() {
   const [selectedSize, setSelectedSize] = useState('M')
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [selectedGalleryImage, setSelectedGalleryImage] = useState(null)
-  const [showOrderForm, setShowOrderForm] = useState(false)
   const videoRef = useRef(null)
 
   // Get the current main image (either selected gallery image or color image)
@@ -42,10 +41,6 @@ function App() {
       }
       setIsVideoPlaying(!isVideoPlaying)
     }
-  }
-
-  const handleOrder = () => {
-    setShowOrderForm(true)
   }
 
   return (
@@ -214,10 +209,9 @@ function App() {
               </div>
             </div>
 
-            {/* Order Button */}
-            <button className="order-btn" onClick={handleOrder}>
-              Order Now
-            </button>
+            {/* Order Form - Integrated */}
+            <OrderForm inline={true} selectedColor={selectedColor} selectedSize={selectedSize} />
+
           </div>
         </div>
       </section>
@@ -334,11 +328,6 @@ function App() {
           </a>
         </div>
       </footer>
-
-      {/* Order Form Modal */}
-      {showOrderForm && (
-        <OrderForm onClose={() => setShowOrderForm(false)} />
-      )}
     </>
   )
 }

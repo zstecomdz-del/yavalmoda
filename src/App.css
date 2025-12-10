@@ -688,6 +688,58 @@
 }
 
 /* ===========================
+   ORDER FORM (INLINE IN PRODUCT)
+   =========================== */
+.order-form-inline.order-form-container {
+  background: transparent;
+  padding: 0;
+  max-width: 100%;
+  max-height: none;
+  overflow: visible;
+  animation: none;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-sand);
+}
+
+.order-form-inline .order-form-header {
+  margin-bottom: var(--space-sm);
+  padding-bottom: 0;
+  border-bottom: none;
+  text-align: left;
+}
+
+.order-form-inline .order-form-tagline {
+  font-size: 0.65rem;
+  margin-bottom: var(--space-xs);
+}
+
+.order-form-inline .order-form-title {
+  font-size: 1.5rem;
+}
+
+.order-form-inline .order-form {
+  gap: var(--space-sm);
+}
+
+.order-form-inline .form-group input,
+.order-form-inline .form-group select {
+  background: var(--color-cream);
+}
+
+.order-form-inline .order-summary {
+  background: var(--color-cream);
+}
+
+.order-form-inline .delivery-option {
+  background: var(--color-cream);
+}
+
+.order-form-inline .quantity-selector {
+  background: var(--color-cream);
+}
+
+/* ===========================
    COLORS SHOWCASE SECTION
    =========================== */
 .colors-showcase {

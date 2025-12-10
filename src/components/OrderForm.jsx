@@ -84,7 +84,7 @@ const productColors = [
 // Web3Forms configuration
 const WEB3FORMS_KEY = 'f9ce567a-2baa-4857-90c4-e8750b9f18cd'
 
-function OrderForm({ onClose }) {
+function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -147,8 +147,11 @@ function OrderForm({ onClose }) {
     setSubmitStatus(null)
 
     const selectedWilaya = wilayas.find(w => w.code === formData.wilaya)
-    const selectedColor = productColors.find(c => c.id === formData.color)
-    const totalPrice = 3900 * formData.quantity
+    // Use external color/size when inline, otherwise use form's internal state
+    const colorName = inline && externalColor ? externalColor.name : productColors.find(c => c.id === formData.color)?.name
+    const sizeName = inline && externalSize ? externalSize : 'M'
+    const quantity = inline ? 1 : formData.quantity
+    const totalPrice = 3900 * quantity
     const deliveryLabel = formData.deliveryType === 'office' ? 'Bureau (Office)' : 'Domicile (Home)'
 
     const orderDetails = {
@@ -160,8 +163,9 @@ function OrderForm({ onClose }) {
       wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
       delivery_type: deliveryLabel,
       product: 'Premium Hoodie + Track Pants Pack',
-      color: selectedColor?.name,
-      quantity: formData.quantity,
+      color: colorName,
+      size: sizeName,
+      quantity: quantity,
       total_price: `${totalPrice.toLocaleString()} DA`,
       message: `New order received from ${formData.name}`,
     }
@@ -179,9 +183,11 @@ function OrderForm({ onClose }) {
 
       if (result.success) {
         setSubmitStatus('success')
-        setTimeout(() => {
-          if (onClose) onClose()
-        }, 2000)
+        if (!inline) {
+          setTimeout(() => {
+            if (onClose) onClose()
+          }, 2000)
+        }
       } else {
         setSubmitStatus('error')
       }
@@ -195,20 +201,16 @@ function OrderForm({ onClose }) {
   const selectedColorData = productColors.find(c => c.id === formData.color)
   const totalPrice = 3900 * formData.quantity
 
-  return (
-    <div className="order-form-overlay" onClick={onClose}>
-      <div className="order-form-container" onClick={e => e.stopPropagation()}>
-        <button className="order-form-close" onClick={onClose}>
-          <span></span>
-          <span></span>
-        </button>
-
+  const formContent = (
+    <>
+      {!inline && (
         <div className="order-form-header">
           <span className="order-form-tagline">Complete Your Order</span>
           <h2 className="order-form-title">Order <em>Details</em></h2>
         </div>
+      )}
 
-        <form className="order-form" onSubmit={handleSubmit}>
+      <form className="order-form" onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
             <label htmlFor="name">Full Name</label>
@@ -283,72 +285,78 @@ function OrderForm({ onClose }) {
             </div>
           </div>
 
-          {/* Color Selector */}
-          <div className="form-group">
-            <label>
-              Color: <strong>{selectedColorData?.name}</strong>
-            </label>
-            <div className="color-selector-row">
-              {productColors.map(color => (
+          {/* Color Selector - only show in modal */}
+          {!inline && (
+            <div className="form-group">
+              <label>
+                Color: <strong>{selectedColorData?.name}</strong>
+              </label>
+              <div className="color-selector-row">
+                {productColors.map(color => (
+                  <button
+                    key={color.id}
+                    type="button"
+                    className={`color-option ${formData.color === color.id ? 'active' : ''}`}
+                    style={{ backgroundColor: color.hex }}
+                    onClick={() => handleColorSelect(color.id)}
+                    title={color.name}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity Selector - only show in modal */}
+          {!inline && (
+            <div className="form-group">
+              <label>Quantity</label>
+              <div className="quantity-selector">
                 <button
-                  key={color.id}
                   type="button"
-                  className={`color-option ${formData.color === color.id ? 'active' : ''}`}
-                  style={{ backgroundColor: color.hex }}
-                  onClick={() => handleColorSelect(color.id)}
-                  title={color.name}
-                />
-              ))}
+                  className="quantity-btn"
+                  onClick={() => handleQuantityChange(-1)}
+                  disabled={formData.quantity <= 1}
+                >
+                  <span className="quantity-minus"></span>
+                </button>
+                <span className="quantity-value">{formData.quantity}</span>
+                <button
+                  type="button"
+                  className="quantity-btn"
+                  onClick={() => handleQuantityChange(1)}
+                  disabled={formData.quantity >= 10}
+                >
+                  <span className="quantity-plus"></span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Quantity Selector */}
-          <div className="form-group">
-            <label>Quantity</label>
-            <div className="quantity-selector">
-              <button
-                type="button"
-                className="quantity-btn"
-                onClick={() => handleQuantityChange(-1)}
-                disabled={formData.quantity <= 1}
-              >
-                <span className="quantity-minus"></span>
-              </button>
-              <span className="quantity-value">{formData.quantity}</span>
-              <button
-                type="button"
-                className="quantity-btn"
-                onClick={() => handleQuantityChange(1)}
-                disabled={formData.quantity >= 10}
-              >
-                <span className="quantity-plus"></span>
-              </button>
+          {/* Price Summary - only show in modal */}
+          {!inline && (
+            <div className="order-summary">
+              <div className="summary-row">
+                <span>Pack Price</span>
+                <span className="price-with-promo">
+                  <span className="old-price">4,500 DA</span>
+                  <span>3,900 DA</span>
+                </span>
+              </div>
+              <div className="summary-row">
+                <span>Quantity</span>
+                <span>× {formData.quantity}</span>
+              </div>
+              <div className="summary-row total">
+                <span>Total</span>
+                <span>{totalPrice.toLocaleString()} DA</span>
+              </div>
             </div>
-          </div>
-
-          {/* Price Summary */}
-          <div className="order-summary">
-            <div className="summary-row">
-              <span>Pack Price</span>
-              <span className="price-with-promo">
-                <span className="old-price">4,500 DA</span>
-                <span>3,900 DA</span>
-              </span>
-            </div>
-            <div className="summary-row">
-              <span>Quantity</span>
-              <span>× {formData.quantity}</span>
-            </div>
-            <div className="summary-row total">
-              <span>Total</span>
-              <span>{totalPrice.toLocaleString()} DA</span>
-            </div>
-          </div>
+          )}
 
           {/* Status Messages */}
           {submitStatus === 'success' && (
             <div className="status-message success">
-              Order sent successfully! Check your email.
+              Order sent successfully!
             </div>
           )}
           {submitStatus === 'error' && (
@@ -363,9 +371,30 @@ function OrderForm({ onClose }) {
             className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
             disabled={isSubmitting || submitStatus === 'success'}
           >
-            <span>{isSubmitting ? 'Sending...' : submitStatus === 'success' ? 'Order Sent!' : 'Confirm Order'}</span>
+            <span>{isSubmitting ? 'Sending...' : submitStatus === 'success' ? 'Order Sent!' : 'Order Now'}</span>
           </button>
         </form>
+    </>
+  )
+
+  // Inline mode - no overlay, just the form
+  if (inline) {
+    return (
+      <div className="order-form-container order-form-inline">
+        {formContent}
+      </div>
+    )
+  }
+
+  // Modal mode - with overlay and close button
+  return (
+    <div className="order-form-overlay" onClick={onClose}>
+      <div className="order-form-container" onClick={e => e.stopPropagation()}>
+        <button className="order-form-close" onClick={onClose}>
+          <span></span>
+          <span></span>
+        </button>
+        {formContent}
       </div>
     </div>
   )
