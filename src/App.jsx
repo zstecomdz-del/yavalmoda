@@ -329,6 +329,9 @@ function App() {
           <p className="footer-copyright">
             &copy; 2025 YA VALMODA. All rights reserved.
           </p>
+          <a href="https://www.sitedz.store" target="_blank" rel="noopener noreferrer" className="dev-signature">
+            crafted by sitedz
+          </a>
         </div>
       </footer>
 

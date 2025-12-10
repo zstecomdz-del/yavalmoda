@@ -46,8 +46,9 @@
 
 .header-logo img {
   height: 50px;
-  width: auto;
-  object-fit: contain;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .header-brand {
@@ -983,6 +984,21 @@
   font-size: 0.8rem;
   color: rgba(250, 248, 245, 0.4);
   letter-spacing: 0.1em;
+}
+
+.dev-signature {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: 0.65rem;
+  font-style: italic;
+  color: rgba(250, 248, 245, 0.25);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.dev-signature:hover {
+  color: rgba(250, 248, 245, 0.5);
 }
 
 /* ===========================
