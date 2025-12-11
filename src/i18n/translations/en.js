@@ -13,8 +13,8 @@ export const en = {
   hero: {
     tagline: "New Arrival 2025",
     title: {
-      part1: "Step Into",
-      part2: "Style"
+      part1: "",
+      part2: "Step Into Style"
     },
     subtitle: "Elevate your wardrobe with our premium collection. Designed for the modern man who values comfort without compromising on style.",
     cta: "Explore Collection"

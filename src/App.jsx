@@ -71,7 +71,7 @@ function App() {
         <div className="hero-content">
           <span className="hero-tagline">{t('hero.tagline')}</span>
           <h1 className="hero-title">
-            {t('hero.title.part1')}<br /><em>{t('hero.title.part2')}</em>
+            <em>{t('hero.title.part2')}</em>
           </h1>
           <p className="hero-subtitle">
             {t('hero.subtitle')}
