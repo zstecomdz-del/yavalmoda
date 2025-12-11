@@ -91,8 +91,8 @@ const productColors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f' },
 ]
 
-// Web3Forms configuration
-const WEB3FORMS_KEY = 'f9ce567a-2baa-4857-90c4-e8750b9f18cd'
+// WhatsApp configuration
+const WHATSAPP_NUMBER = '213671029839'
 
 function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
   const { t } = useLanguage()
@@ -155,7 +155,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     if (!validateForm()) return
@@ -173,49 +173,36 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     const totalPrice = productTotal + deliveryCost
     const deliveryLabel = formData.deliveryType === 'office' ? t('orderForm.deliveryType.office.title') : t('orderForm.deliveryType.home.title')
 
-    const orderDetails = {
-      access_key: WEB3FORMS_KEY,
-      subject: `${t('orderForm.email.subject')} - ${formData.name}`,
-      from_name: t('orderForm.email.fromName'),
-      name: formData.name,
-      phone: formData.phone,
-      wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
-      delivery_type: deliveryLabel,
-      delivery_cost: `${deliveryCost.toLocaleString()} ${t('product.priceCurrency')}`,
-      product: t('product.name'),
-      color: colorName,
-      size: sizeName,
-      quantity: quantity,
-      product_total: `${productTotal.toLocaleString()} ${t('product.priceCurrency')}`,
-      total_price: `${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`,
-      message: `${t('orderForm.email.message')} ${formData.name}`,
-    }
+    // Build WhatsApp message
+    const message = `*${t('orderForm.email.subject')}*
 
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderDetails),
-      })
+*${t('orderForm.name.label')}:* ${formData.name}
+*${t('orderForm.phone.label')}:* ${formData.phone}
+*${t('orderForm.wilaya.label')}:* ${selectedWilaya?.code} - ${selectedWilaya?.name}
+*${t('orderForm.deliveryType.label')}:* ${deliveryLabel}
+*${t('orderForm.summary.delivery')}:* ${deliveryCost.toLocaleString()} ${t('product.priceCurrency')}
 
-      const result = await response.json()
+*${t('product.name')}*
+*${t('orderForm.color.label')}* ${colorName}
+*${t('product.sizeLabel')}:* ${sizeName}
+*${t('orderForm.quantity.label')}:* ${quantity}
 
-      if (result.success) {
-        setSubmitStatus('success')
-        if (!inline) {
-          setTimeout(() => {
-            if (onClose) onClose()
-          }, 2000)
-        }
-      } else {
-        setSubmitStatus('error')
-      }
-    } catch (error) {
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
+*${t('orderForm.summary.total')}:* ${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`
+
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
+
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank')
+
+    setSubmitStatus('success')
+    setIsSubmitting(false)
+
+    if (!inline) {
+      setTimeout(() => {
+        if (onClose) onClose()
+      }, 2000)
     }
   }
 
