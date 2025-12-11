@@ -191,7 +191,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
     try {
       // Send order data to Google Apps Script
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors', // Required for Google Apps Script
         headers: {
@@ -203,6 +203,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
       // Note: With 'no-cors' mode, we can't read the response
       // but the request will still be sent successfully
       setSubmitStatus('success')
+      setIsSubmitting(false)
+
+      // Close modal after success
+      if (!inline && onClose) {
+        setTimeout(() => onClose(), 2000)
+      }
 
       // Optional: Also open WhatsApp as backup notification
       // Uncomment the lines below if you want both email AND WhatsApp
@@ -237,12 +243,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     } catch (error) {
       console.error('Error submitting order:', error)
       setSubmitStatus('error')
-    } finally {
       setIsSubmitting(false)
-
-      if (submitStatus !== 'error' && !inline && onClose) {
-        setTimeout(() => onClose(), 2000)
-      }
     }
   }
 
