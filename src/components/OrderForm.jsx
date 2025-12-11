@@ -91,7 +91,10 @@ const productColors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f' },
 ]
 
-// WhatsApp number for orders
+// Google Apps Script Web App URL for email notifications
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_7ppTaVPq5NSSwwX7xGAVPfBa7uNAotC39fNi9rmNElIZ80VXuK54DpTyLZjzz-uhBw/exec'
+
+// Backup: WhatsApp number (optional - remove if only using email)
 const WHATSAPP_NUMBER = '213671029839'
 
 function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
@@ -186,8 +189,25 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
       totalPrice: `${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`
     }
 
-    // Build WhatsApp message
-    const message = `═══════════════════════
+    try {
+      // Send order data to Google Apps Script
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      })
+
+      // Note: With 'no-cors' mode, we can't read the response
+      // but the request will still be sent successfully
+      setSubmitStatus('success')
+
+      // Optional: Also open WhatsApp as backup notification
+      // Uncomment the lines below if you want both email AND WhatsApp
+      /*
+      const message = `═══════════════════════
 طلب جديد - YA VALMODA
 ═══════════════════════
 
@@ -210,15 +230,19 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 المجموع: ${orderData.totalPrice}
 ═══════════════════════`
 
-    // Open WhatsApp with the message
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+      window.open(whatsappUrl, '_blank')
+      */
 
-    setSubmitStatus('success')
-    setIsSubmitting(false)
+    } catch (error) {
+      console.error('Error submitting order:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
 
-    if (!inline && onClose) {
-      setTimeout(() => onClose(), 2000)
+      if (submitStatus !== 'error' && !inline && onClose) {
+        setTimeout(() => onClose(), 2000)
+      }
     }
   }
 
