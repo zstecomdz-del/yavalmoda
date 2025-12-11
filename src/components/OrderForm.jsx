@@ -91,8 +91,8 @@ const productColors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f' },
 ]
 
-// WhatsApp configuration
-const WHATSAPP_NUMBER = '213671029839'
+// Google Apps Script endpoint
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEmnTwAjOBQjSveGuzEibmrs53da26pBRTQA1wZHxqh3dXJt0CvB9Luo342-Ht29KjKg/exec'
 
 function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
   const { t } = useLanguage()
@@ -155,7 +155,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!validateForm()) return
@@ -173,36 +173,40 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     const totalPrice = productTotal + deliveryCost
     const deliveryLabel = formData.deliveryType === 'office' ? t('orderForm.deliveryType.office.title') : t('orderForm.deliveryType.home.title')
 
-    // Build WhatsApp message
-    const message = `*${t('orderForm.email.subject')}*
+    const orderData = {
+      name: formData.name,
+      phone: formData.phone,
+      wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
+      deliveryType: deliveryLabel,
+      deliveryCost: `${deliveryCost.toLocaleString()} ${t('product.priceCurrency')}`,
+      product: t('product.name'),
+      color: colorName,
+      size: sizeName,
+      quantity: quantity,
+      totalPrice: `${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`
+    }
 
-*${t('orderForm.name.label')}:* ${formData.name}
-*${t('orderForm.phone.label')}:* ${formData.phone}
-*${t('orderForm.wilaya.label')}:* ${selectedWilaya?.code} - ${selectedWilaya?.name}
-*${t('orderForm.deliveryType.label')}:* ${deliveryLabel}
-*${t('orderForm.summary.delivery')}:* ${deliveryCost.toLocaleString()} ${t('product.priceCurrency')}
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      })
 
-*${t('product.name')}*
-*${t('orderForm.color.label')}* ${colorName}
-*${t('product.sizeLabel')}:* ${sizeName}
-*${t('orderForm.quantity.label')}:* ${quantity}
-
-*${t('orderForm.summary.total')}:* ${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`
-
-    // Encode message for URL
-    const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
-
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank')
-
-    setSubmitStatus('success')
-    setIsSubmitting(false)
-
-    if (!inline) {
-      setTimeout(() => {
-        if (onClose) onClose()
-      }, 2000)
+      // With no-cors mode, we can't read the response, but if no error thrown, assume success
+      setSubmitStatus('success')
+      if (!inline) {
+        setTimeout(() => {
+          if (onClose) onClose()
+        }, 2000)
+      }
+    } catch (error) {
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
