@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import './App.css'
 import OrderForm from './components/OrderForm'
+import LanguageSwitcher from './components/LanguageSwitcher'
+import { useLanguage } from './i18n/LanguageContext'
 
 // Product colors with their images
 const colors = [
@@ -23,6 +25,7 @@ const sizes = ['S', 'M', 'L', 'XL', 'XXL']
 const WHATSAPP_NUMBER = '213798700447'
 
 function App() {
+  const { language, t } = useLanguage()
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedSize, setSelectedSize] = useState('M')
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
@@ -44,10 +47,10 @@ function App() {
   }
 
   return (
-    <>
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
       {/* Announcement Bar */}
       <div className="announcement-bar">
-        <span>Livraison 69 Wilaya</span>
+        <span>{t('announcement')}</span>
       </div>
 
       {/* Header */}
@@ -55,33 +58,32 @@ function App() {
         <div className="header-logo">
           <img src="/images/logo.jpeg" alt="YA VALMODA" />
         </div>
+        <LanguageSwitcher />
         <nav className="header-nav">
-          <a href="#collection">Collection</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="#collection">{t('nav.collection')}</a>
+          <a href="#about">{t('nav.about')}</a>
+          <a href="#contact">{t('nav.contact')}</a>
         </nav>
       </header>
 
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <span className="hero-tagline">New Arrival 2025</span>
+          <span className="hero-tagline">{t('hero.tagline')}</span>
           <h1 className="hero-title">
-            Step Into<br /><em>Style</em>
+            {t('hero.title.part1')}<br /><em>{t('hero.title.part2')}</em>
           </h1>
           <p className="hero-subtitle">
-            Elevate your wardrobe with our premium collection.
-            Designed for the modern man who values comfort without
-            compromising on style.
+            {t('hero.subtitle')}
           </p>
           <a href="#collection" className="hero-cta">
-            <span>Explore Collection</span>
+            <span>{t('hero.cta')}</span>
           </a>
         </div>
         <div className="hero-image">
           <img src="/images/all-colors.png" alt="YA VALMODA Collection" />
           <div className="hero-image-overlay">
-            <span>3,900 DA</span>
+            <span>3,900 {t('product.priceCurrency')}</span>
           </div>
         </div>
       </section>
@@ -90,10 +92,10 @@ function App() {
       <section className="video-section">
         <div className="video-container">
           <div className="video-content">
-            <span className="video-tagline">See It In Action</span>
-            <h2 className="video-title">Watch The <em>Collection</em></h2>
+            <span className="video-tagline">{t('video.tagline')}</span>
+            <h2 className="video-title">{t('video.title.part1')} <em>{t('video.title.part2')}</em></h2>
             <p className="video-description">
-              Experience the quality and style of our premium collection in motion.
+              {t('video.description')}
             </p>
           </div>
           <div className="video-wrapper" onClick={handleVideoPlay}>
@@ -111,7 +113,7 @@ function App() {
             {!isVideoPlaying && (
               <div className="video-play-overlay">
                 <div className="play-button">
-                  <span>PLAY</span>
+                  <span>{t('video.play')}</span>
                 </div>
               </div>
             )}
@@ -159,26 +161,23 @@ function App() {
 
           {/* Product Details */}
           <div className="product-details">
-            <span className="product-label">Full Pack</span>
-            <h2 className="product-name">Premium Hoodie + Track Pants</h2>
+            <span className="product-label">{t('product.label')}</span>
+            <h2 className="product-name">{t('product.name')}</h2>
             <p className="product-description">
-              The perfect combination of style and comfort. Our premium
-              color-block hoodie paired with sleek track pants featuring
-              a signature white stripe. Crafted from high-quality materials
-              for all-day comfort.
+              {t('product.description')}
             </p>
 
             <div className="product-price">
-              <span className="price-old">4,500 DA</span>
-              <span className="price-amount">3,900</span>
-              <span className="price-currency">DA</span>
-              <span className="price-note">Full Pack</span>
+              <span className="price-old">{t('product.priceOld')}</span>
+              <span className="price-amount">{t('product.priceNew')}</span>
+              <span className="price-currency">{t('product.priceCurrency')}</span>
+              <span className="price-note">{t('product.priceNote')}</span>
             </div>
 
             {/* Color Selector */}
             <div className="color-selector">
               <span className="color-label">
-                Color: <strong>{selectedColor.name}</strong>
+                {t('product.colorLabel')} <strong>{t(`product.colors.${selectedColor.id}`)}</strong>
               </span>
               <div className="color-options">
                 {colors.map((color) => (
@@ -187,7 +186,7 @@ function App() {
                     className={`color-btn ${selectedColor.id === color.id ? 'active' : ''}`}
                     style={{ backgroundColor: color.hex }}
                     onClick={() => setSelectedColor(color)}
-                    title={color.name}
+                    title={t(`product.colors.${color.id}`)}
                   />
                 ))}
               </div>
@@ -195,7 +194,7 @@ function App() {
 
             {/* Size Selector */}
             <div className="size-selector">
-              <span className="size-label">Select Size</span>
+              <span className="size-label">{t('product.sizeLabel')}</span>
               <div className="size-options">
                 {sizes.map((size) => (
                   <button
@@ -219,8 +218,8 @@ function App() {
       {/* Color Showcase Section */}
       <section className="colors-showcase">
         <div className="colors-header">
-          <span className="colors-tagline">Available In</span>
-          <h2 className="colors-title">Three <em>Classic</em> Colors</h2>
+          <span className="colors-tagline">{t('colorsShowcase.tagline')}</span>
+          <h2 className="colors-title">{t('colorsShowcase.title.part1')} <em>{t('colorsShowcase.title.part2')}</em> {t('colorsShowcase.title.part3')}</h2>
         </div>
         <div className="colors-grid">
           {colors.map((color) => (
@@ -233,14 +232,14 @@ function App() {
               }}
             >
               <div className="color-card-image">
-                <img src={color.image} alt={color.name} />
+                <img src={color.image} alt={t(`product.colors.${color.id}`)} />
               </div>
               <div className="color-card-info">
                 <span
                   className="color-card-swatch"
                   style={{ backgroundColor: color.hex }}
                 />
-                <span className="color-card-name">{color.name}</span>
+                <span className="color-card-name">{t(`product.colors.${color.id}`)}</span>
               </div>
             </div>
           ))}
@@ -250,32 +249,29 @@ function App() {
       {/* Features Section */}
       <section className="features-section" id="about">
         <div className="features-header">
-          <h2 className="features-title">Why Choose Us</h2>
-          <p className="features-subtitle">Quality meets style in every piece</p>
+          <h2 className="features-title">{t('features.title')}</h2>
+          <p className="features-subtitle">{t('features.subtitle')}</p>
         </div>
         <div className="features-grid">
           <div className="feature-card">
-            <div className="feature-number">01</div>
-            <h3 className="feature-title">Premium Quality</h3>
+            <div className="feature-number">{t('features.feature1.number')}</div>
+            <h3 className="feature-title">{t('features.feature1.title')}</h3>
             <p className="feature-text">
-              Crafted from the finest materials for durability and comfort
-              that lasts through countless wears.
+              {t('features.feature1.text')}
             </p>
           </div>
           <div className="feature-card">
-            <div className="feature-number">02</div>
-            <h3 className="feature-title">Modern Design</h3>
+            <div className="feature-number">{t('features.feature2.number')}</div>
+            <h3 className="feature-title">{t('features.feature2.title')}</h3>
             <p className="feature-text">
-              Contemporary aesthetics that blend seamlessly with your
-              lifestyle. Timeless pieces for the modern man.
+              {t('features.feature2.text')}
             </p>
           </div>
           <div className="feature-card">
-            <div className="feature-number">03</div>
-            <h3 className="feature-title">Perfect Fit</h3>
+            <div className="feature-number">{t('features.feature3.number')}</div>
+            <h3 className="feature-title">{t('features.feature3.title')}</h3>
             <p className="feature-text">
-              Carefully tailored to provide the ideal silhouette.
-              Comfort and style in perfect harmony.
+              {t('features.feature3.text')}
             </p>
           </div>
         </div>
@@ -284,12 +280,12 @@ function App() {
       {/* Lookbook Marquee */}
       <section className="lookbook-section">
         <div className="lookbook-marquee">
-          <span className="lookbook-text">YA VALMODA</span>
-          <span className="lookbook-text">STEP INTO STYLE</span>
-          <span className="lookbook-text">MAN CLOTHES</span>
-          <span className="lookbook-text">YA VALMODA</span>
-          <span className="lookbook-text">STEP INTO STYLE</span>
-          <span className="lookbook-text">MAN CLOTHES</span>
+          <span className="lookbook-text">{t('lookbook.brand')}</span>
+          <span className="lookbook-text">{t('lookbook.tagline')}</span>
+          <span className="lookbook-text">{t('lookbook.category')}</span>
+          <span className="lookbook-text">{t('lookbook.brand')}</span>
+          <span className="lookbook-text">{t('lookbook.tagline')}</span>
+          <span className="lookbook-text">{t('lookbook.category')}</span>
         </div>
       </section>
 
@@ -297,38 +293,37 @@ function App() {
       <footer className="footer" id="contact">
         <div className="footer-content">
           <div className="footer-brand">
-            <div className="footer-logo">YA VALMODA</div>
+            <div className="footer-logo">{t('footer.brand')}</div>
             <p className="footer-tagline">
-              Step into style with our premium men's collection.
-              Quality craftsmanship meets contemporary design.
+              {t('footer.tagline')}
             </p>
           </div>
           <div className="footer-column">
-            <h4>Quick Links</h4>
+            <h4>{t('footer.quickLinks')}</h4>
             <ul>
-              <li><a href="#collection">Collection</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="#collection">{t('nav.collection')}</a></li>
+              <li><a href="#about">{t('nav.about')}</a></li>
+              <li><a href="#contact">{t('nav.contact')}</a></li>
             </ul>
           </div>
           <div className="footer-column">
-            <h4>Contact</h4>
+            <h4>{t('footer.contact')}</h4>
             <ul>
-              <li><a href={`https://wa.me/${WHATSAPP_NUMBER}`}>WhatsApp</a></li>
-              <li><a href="#">Algeria</a></li>
+              <li><a href={`https://wa.me/${WHATSAPP_NUMBER}`}>{t('footer.whatsapp')}</a></li>
+              <li><a href="#">{t('footer.algeria')}</a></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
           <p className="footer-copyright">
-            &copy; 2025 YA VALMODA. All rights reserved.
+            &copy; {t('footer.copyright')}
           </p>
           <a href="https://www.sitedz.store" target="_blank" rel="noopener noreferrer" className="dev-signature">
-            crafted by sitedz
+            {t('footer.craftedBy')}
           </a>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
 

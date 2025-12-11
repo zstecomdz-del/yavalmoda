@@ -1190,3 +1190,132 @@
     height: 350px;
   }
 }
+
+/* ========================================
+   Language Switcher Styles
+   ======================================== */
+
+.language-switcher {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  font-weight: 400;
+}
+
+.lang-btn {
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+  padding: 0.25rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--color-charcoal);
+}
+
+.lang-btn:hover {
+  opacity: 0.75;
+}
+
+.lang-btn.active {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.lang-separator {
+  opacity: 0.3;
+  user-select: none;
+}
+
+/* ========================================
+   RTL Layout Overrides
+   ======================================== */
+
+/* Header */
+[dir="rtl"] .header-nav {
+  flex-direction: row-reverse;
+}
+
+/* Hero Section */
+[dir="rtl"] .hero-content {
+  text-align: right;
+}
+
+[dir="rtl"] .hero-cta:hover {
+  transform: translateX(-5px);
+}
+
+/* Product Gallery */
+[dir="rtl"] .product-container {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .gallery-thumbnails {
+  order: 2;
+}
+
+[dir="rtl"] .gallery-main {
+  order: 1;
+}
+
+/* Color and Size Selectors */
+[dir="rtl"] .color-options,
+[dir="rtl"] .size-options {
+  flex-direction: row-reverse;
+}
+
+/* Grid Layouts */
+[dir="rtl"] .footer-content,
+[dir="rtl"] .features-grid,
+[dir="rtl"] .colors-grid {
+  direction: rtl;
+}
+
+/* Footer Columns */
+[dir="rtl"] .footer-content {
+  text-align: right;
+}
+
+/* Animations for RTL */
+[dir="rtl"] @keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir="rtl"] @keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Mobile RTL Adjustments */
+@media (max-width: 768px) {
+  [dir="rtl"] .product-container {
+    flex-direction: column;
+  }
+  
+  [dir="rtl"] .gallery-thumbnails {
+    order: 1;
+    flex-direction: row;
+  }
+  
+  [dir="rtl"] .gallery-main {
+    order: 2;
+  }
+  
+  .language-switcher {
+    font-size: 0.75rem;
+  }
+}

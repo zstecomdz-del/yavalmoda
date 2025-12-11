@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './OrderForm.css'
+import { useLanguage } from '../i18n/LanguageContext'
 
 // 69 Wilayas of Algeria with delivery pricing
 const wilayas = [
@@ -94,6 +95,7 @@ const productColors = [
 const WEB3FORMS_KEY = 'f9ce567a-2baa-4857-90c4-e8750b9f18cd'
 
 function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -130,22 +132,22 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     const newErrors = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
+      newErrors.name = t('orderForm.validation.nameRequired')
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required'
+      newErrors.phone = t('orderForm.validation.phoneRequired')
     } else if (!/^(0|\+213)[567]\d{8}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Enter a valid Algerian phone number'
+      newErrors.phone = t('orderForm.validation.phoneInvalid')
     }
 
     if (!formData.wilaya) {
-      newErrors.wilaya = 'Please select your wilaya'
+      newErrors.wilaya = t('orderForm.validation.wilayaRequired')
     } else {
       // Check if delivery is available for this wilaya
       const deliveryCost = calculateDeliveryCost(formData.wilaya, formData.deliveryType)
       if (deliveryCost === null) {
-        newErrors.wilaya = 'Sorry, delivery not available for this wilaya'
+        newErrors.wilaya = t('orderForm.validation.wilayaUnavailable')
       }
     }
 
@@ -163,30 +165,30 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
     const selectedWilaya = wilayas.find(w => w.code === formData.wilaya)
     // Use external color/size when inline, otherwise use form's internal state
-    const colorName = inline && externalColor ? externalColor.name : productColors.find(c => c.id === formData.color)?.name
+    const colorName = inline && externalColor ? t(`product.colors.${externalColor.id}`) : t(`product.colors.${formData.color}`)
     const sizeName = inline && externalSize ? externalSize : 'M'
     const quantity = inline ? 1 : formData.quantity
     const productTotal = 3900 * quantity
     const deliveryCost = calculateDeliveryCost(formData.wilaya, formData.deliveryType)
     const totalPrice = productTotal + deliveryCost
-    const deliveryLabel = formData.deliveryType === 'office' ? 'Bureau (Office)' : 'Domicile (Home)'
+    const deliveryLabel = formData.deliveryType === 'office' ? t('orderForm.deliveryType.office.title') : t('orderForm.deliveryType.home.title')
 
     const orderDetails = {
       access_key: WEB3FORMS_KEY,
-      subject: `New Order - YA VALMODA - ${formData.name}`,
-      from_name: 'YA VALMODA Orders',
+      subject: `${t('orderForm.email.subject')} - ${formData.name}`,
+      from_name: t('orderForm.email.fromName'),
       name: formData.name,
       phone: formData.phone,
       wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
       delivery_type: deliveryLabel,
-      delivery_cost: `${deliveryCost.toLocaleString()} DA`,
-      product: 'Premium Hoodie + Track Pants Pack',
+      delivery_cost: `${deliveryCost.toLocaleString()} ${t('product.priceCurrency')}`,
+      product: t('product.name'),
       color: colorName,
       size: sizeName,
       quantity: quantity,
-      product_total: `${productTotal.toLocaleString()} DA`,
-      total_price: `${totalPrice.toLocaleString()} DA`,
-      message: `New order received from ${formData.name}`,
+      product_total: `${productTotal.toLocaleString()} ${t('product.priceCurrency')}`,
+      total_price: `${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`,
+      message: `${t('orderForm.email.message')} ${formData.name}`,
     }
 
     try {
@@ -226,22 +228,22 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     <>
       {!inline && (
         <div className="order-form-header">
-          <span className="order-form-tagline">Complete Your Order</span>
-          <h2 className="order-form-title">Order <em>Details</em></h2>
+          <span className="order-form-tagline">{t('orderForm.tagline')}</span>
+          <h2 className="order-form-title">{t('orderForm.title.part1')} <em>{t('orderForm.title.part2')}</em></h2>
         </div>
       )}
 
       <form className="order-form" onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name">{t('orderForm.name.label')}</label>
             <input
               type="text"
               id="name"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder={t('orderForm.name.placeholder')}
               autoComplete="name"
             />
             {errors.name && <span className="error-text">{errors.name}</span>}
@@ -249,14 +251,14 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
           {/* Phone Field */}
           <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone">{t('orderForm.phone.label')}</label>
             <input
               type="tel"
               id="phone"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="0555 123 456"
+              placeholder={t('orderForm.phone.placeholder')}
               autoComplete="tel"
             />
             {errors.phone && <span className="error-text">{errors.phone}</span>}
@@ -264,7 +266,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
           {/* Wilaya Selector */}
           <div className={`form-group ${errors.wilaya ? 'has-error' : ''}`}>
-            <label htmlFor="wilaya">Wilaya</label>
+            <label htmlFor="wilaya">{t('orderForm.wilaya.label')}</label>
             <div className="select-wrapper">
               <select
                 id="wilaya"
@@ -272,14 +274,14 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
                 value={formData.wilaya}
                 onChange={handleChange}
               >
-                <option value="">Select your wilaya</option>
+                <option value="">{t('orderForm.wilaya.placeholder')}</option>
                 {wilayas.map(w => (
                   <option
                     key={w.code}
                     value={w.code}
                     disabled={w.homeDelivery === null}
                   >
-                    {w.code} - {w.name} {w.homeDelivery === null ? '(Not available)' : ''}
+                    {w.code} - {w.name} {w.homeDelivery === null ? t('orderForm.wilaya.notAvailable') : ''}
                   </option>
                 ))}
               </select>
@@ -289,28 +291,28 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
           {/* Delivery Type */}
           <div className="form-group">
-            <label>Delivery Type</label>
+            <label>{t('orderForm.deliveryType.label')}</label>
             <div className="delivery-options">
               <button
                 type="button"
                 className={`delivery-option ${formData.deliveryType === 'office' ? 'active' : ''}`}
                 onClick={() => setFormData(prev => ({ ...prev, deliveryType: 'office' }))}
               >
-                <span className="delivery-option-title">Bureau</span>
-                <span className="delivery-option-desc">Pick up from office</span>
+                <span className="delivery-option-title">{t('orderForm.deliveryType.office.title')}</span>
+                <span className="delivery-option-desc">{t('orderForm.deliveryType.office.desc')}</span>
               </button>
               <button
                 type="button"
                 className={`delivery-option ${formData.deliveryType === 'home' ? 'active' : ''}`}
                 onClick={() => setFormData(prev => ({ ...prev, deliveryType: 'home' }))}
               >
-                <span className="delivery-option-title">Domicile</span>
-                <span className="delivery-option-desc">Deliver to your door</span>
+                <span className="delivery-option-title">{t('orderForm.deliveryType.home.title')}</span>
+                <span className="delivery-option-desc">{t('orderForm.deliveryType.home.desc')}</span>
               </button>
             </div>
             {formData.wilaya && deliveryCost !== null && (
               <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-                Delivery cost: <strong>{deliveryCost.toLocaleString()} DA</strong>
+                {t('orderForm.deliveryType.cost')} <strong>{deliveryCost.toLocaleString()} {t('product.priceCurrency')}</strong>
               </div>
             )}
           </div>
@@ -319,7 +321,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
           {!inline && (
             <div className="form-group">
               <label>
-                Color: <strong>{selectedColorData?.name}</strong>
+                {t('orderForm.color.label')} <strong>{t(`product.colors.${selectedColorData?.id}`)}</strong>
               </label>
               <div className="color-selector-row">
                 {productColors.map(color => (
@@ -329,7 +331,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
                     className={`color-option ${formData.color === color.id ? 'active' : ''}`}
                     style={{ backgroundColor: color.hex }}
                     onClick={() => handleColorSelect(color.id)}
-                    title={color.name}
+                    title={t(`product.colors.${color.id}`)}
                   />
                 ))}
               </div>
@@ -339,7 +341,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
           {/* Quantity Selector - only show in modal */}
           {!inline && (
             <div className="form-group">
-              <label>Quantity</label>
+              <label>{t('orderForm.quantity.label')}</label>
               <div className="quantity-selector">
                 <button
                   type="button"
@@ -366,25 +368,25 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
           {!inline && (
             <div className="order-summary">
               <div className="summary-row">
-                <span>Pack Price</span>
+                <span>{t('orderForm.summary.packPrice')}</span>
                 <span className="price-with-promo">
-                  <span className="old-price">4,500 DA</span>
-                  <span>3,900 DA</span>
+                  <span className="old-price">{t('product.priceOld')}</span>
+                  <span>{t('product.priceNew')} {t('product.priceCurrency')}</span>
                 </span>
               </div>
               <div className="summary-row">
-                <span>Quantity</span>
+                <span>{t('orderForm.summary.quantity')}</span>
                 <span>× {formData.quantity}</span>
               </div>
               {formData.wilaya && deliveryCost !== null && (
                 <div className="summary-row">
-                  <span>Delivery ({formData.deliveryType === 'office' ? 'Bureau' : 'Domicile'})</span>
-                  <span>{deliveryCost.toLocaleString()} DA</span>
+                  <span>{t('orderForm.summary.delivery')} ({formData.deliveryType === 'office' ? t('orderForm.summary.bureau') : t('orderForm.summary.domicile')})</span>
+                  <span>{deliveryCost.toLocaleString()} {t('product.priceCurrency')}</span>
                 </div>
               )}
               <div className="summary-row total">
-                <span>Total</span>
-                <span>{totalPrice.toLocaleString()} DA</span>
+                <span>{t('orderForm.summary.total')}</span>
+                <span>{totalPrice.toLocaleString()} {t('product.priceCurrency')}</span>
               </div>
             </div>
           )}
@@ -392,12 +394,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
           {/* Status Messages */}
           {submitStatus === 'success' && (
             <div className="status-message success">
-              Order sent successfully!
+              {t('orderForm.status.success')}
             </div>
           )}
           {submitStatus === 'error' && (
             <div className="status-message error">
-              Failed to send order. Please try again.
+              {t('orderForm.status.error')}
             </div>
           )}
 
@@ -411,12 +413,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
               fontSize: '15px'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span>Product:</span>
-                <span>3,900 DA</span>
+                <span>{t('orderForm.summary.product')}</span>
+                <span>{t('product.priceNew')} {t('product.priceCurrency')}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span>Delivery:</span>
-                <span>{deliveryCost.toLocaleString()} DA</span>
+                <span>{t('orderForm.summary.deliveryLabel')}</span>
+                <span>{deliveryCost.toLocaleString()} {t('product.priceCurrency')}</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -426,8 +428,8 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
                 fontWeight: 'bold',
                 fontSize: '16px'
               }}>
-                <span>Total:</span>
-                <span>{totalPrice.toLocaleString()} DA</span>
+                <span>{t('orderForm.summary.total')}</span>
+                <span>{totalPrice.toLocaleString()} {t('product.priceCurrency')}</span>
               </div>
             </div>
           )}
@@ -438,7 +440,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
             className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
             disabled={isSubmitting || submitStatus === 'success'}
           >
-            <span>{isSubmitting ? 'Sending...' : submitStatus === 'success' ? 'Order Sent!' : 'Order Now'}</span>
+            <span>{isSubmitting ? t('orderForm.submit.sending') : submitStatus === 'success' ? t('orderForm.submit.sent') : t('orderForm.submit.order')}</span>
           </button>
         </form>
     </>

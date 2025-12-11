@@ -578,3 +578,66 @@
     min-width: 40px;
   }
 }
+
+/* ========================================
+   RTL Layout Overrides
+   ======================================== */
+
+/* Form Inputs */
+[dir="rtl"] .form-group input,
+[dir="rtl"] .form-group select {
+  text-align: right;
+  padding-right: 1rem;
+  padding-left: 2.5rem;
+}
+
+/* Dropdown Arrow */
+[dir="rtl"] .select-wrapper::after {
+  left: 1rem;
+  right: auto;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* Delivery Options */
+[dir="rtl"] .delivery-options {
+  direction: rtl;
+}
+
+[dir="rtl"] .delivery-option {
+  text-align: right;
+}
+
+/* Color Selector */
+[dir="rtl"] .color-selector-row {
+  flex-direction: row-reverse;
+}
+
+/* Quantity Selector */
+[dir="rtl"] .quantity-selector {
+  flex-direction: row-reverse;
+}
+
+/* Summary Rows */
+[dir="rtl"] .summary-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .price-with-promo {
+  flex-direction: row-reverse;
+}
+
+/* Order Form Close Button */
+[dir="rtl"] .order-form-close {
+  right: auto;
+  left: 1.5rem;
+}
+
+/* Status Messages */
+[dir="rtl"] .status-message {
+  text-align: center;
+}
+
+/* Submit Button */
+[dir="rtl"] .submit-btn {
+  direction: rtl;
+}
