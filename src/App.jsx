@@ -22,7 +22,7 @@ const galleryImages = [
 const sizes = ['S', 'M', 'L', 'XL', 'XXL']
 
 // WhatsApp configuration
-const WHATSAPP_NUMBER = '213798700447'
+const WHATSAPP_NUMBER = '213671029839'
 
 function App() {
   const { language, t } = useLanguage()
