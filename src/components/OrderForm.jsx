@@ -1,78 +1,87 @@
 import { useState } from 'react'
 import './OrderForm.css'
 
-// 69 Wilayas of Algeria
+// 69 Wilayas of Algeria with delivery pricing
 const wilayas = [
-  { code: '01', name: 'Adrar' },
-  { code: '02', name: 'Chlef' },
-  { code: '03', name: 'Laghouat' },
-  { code: '04', name: 'Oum El Bouaghi' },
-  { code: '05', name: 'Batna' },
-  { code: '06', name: 'Béjaïa' },
-  { code: '07', name: 'Biskra' },
-  { code: '08', name: 'Béchar' },
-  { code: '09', name: 'Blida' },
-  { code: '10', name: 'Bouira' },
-  { code: '11', name: 'Tamanrasset' },
-  { code: '12', name: 'Tébessa' },
-  { code: '13', name: 'Tlemcen' },
-  { code: '14', name: 'Tiaret' },
-  { code: '15', name: 'Tizi Ouzou' },
-  { code: '16', name: 'Alger' },
-  { code: '17', name: 'Djelfa' },
-  { code: '18', name: 'Jijel' },
-  { code: '19', name: 'Sétif' },
-  { code: '20', name: 'Saïda' },
-  { code: '21', name: 'Skikda' },
-  { code: '22', name: 'Sidi Bel Abbès' },
-  { code: '23', name: 'Annaba' },
-  { code: '24', name: 'Guelma' },
-  { code: '25', name: 'Constantine' },
-  { code: '26', name: 'Médéa' },
-  { code: '27', name: 'Mostaganem' },
-  { code: '28', name: "M'Sila" },
-  { code: '29', name: 'Mascara' },
-  { code: '30', name: 'Ouargla' },
-  { code: '31', name: 'Oran' },
-  { code: '32', name: 'El Bayadh' },
-  { code: '33', name: 'Illizi' },
-  { code: '34', name: 'Bordj Bou Arréridj' },
-  { code: '35', name: 'Boumerdès' },
-  { code: '36', name: 'El Tarf' },
-  { code: '37', name: 'Tindouf' },
-  { code: '38', name: 'Tissemsilt' },
-  { code: '39', name: 'El Oued' },
-  { code: '40', name: 'Khenchela' },
-  { code: '41', name: 'Souk Ahras' },
-  { code: '42', name: 'Tipaza' },
-  { code: '43', name: 'Mila' },
-  { code: '44', name: 'Aïn Defla' },
-  { code: '45', name: 'Naâma' },
-  { code: '46', name: 'Aïn Témouchent' },
-  { code: '47', name: 'Ghardaïa' },
-  { code: '48', name: 'Relizane' },
-  { code: '49', name: 'El M\'Ghair' },
-  { code: '50', name: 'El Meniaa' },
-  { code: '51', name: 'Ouled Djellal' },
-  { code: '52', name: 'Bordj Baji Mokhtar' },
-  { code: '53', name: 'Béni Abbès' },
-  { code: '54', name: 'Timimoun' },
-  { code: '55', name: 'Touggourt' },
-  { code: '56', name: 'Djanet' },
-  { code: '57', name: 'In Salah' },
-  { code: '58', name: 'In Guezzam' },
-  { code: '59', name: 'Aflou' },
-  { code: '60', name: 'Aïn Oussera' },
-  { code: '61', name: 'Barika' },
-  { code: '62', name: 'Bir el-Ater' },
-  { code: '63', name: 'Bou Saâda' },
-  { code: '64', name: 'El Abiodh Sidi Cheikh' },
-  { code: '65', name: 'El Aricha' },
-  { code: '66', name: 'El Kantara' },
-  { code: '67', name: 'Ksar Chellala' },
-  { code: '68', name: 'Ksar El Boukhari' },
-  { code: '69', name: 'Messaad' },
+  { code: '01', name: 'Adrar', homeDelivery: 1450 },
+  { code: '02', name: 'Chlef', homeDelivery: 800 },
+  { code: '03', name: 'Laghouat', homeDelivery: 950 },
+  { code: '04', name: 'Oum El Bouaghi', homeDelivery: 750 },
+  { code: '05', name: 'Batna', homeDelivery: 800 },
+  { code: '06', name: 'Béjaïa', homeDelivery: 800 },
+  { code: '07', name: 'Biskra', homeDelivery: 800 },
+  { code: '08', name: 'Béchar', homeDelivery: 1100 },
+  { code: '09', name: 'Blida', homeDelivery: 750 },
+  { code: '10', name: 'Bouira', homeDelivery: 500 },
+  { code: '11', name: 'Tamanrasset', homeDelivery: 1600 },
+  { code: '12', name: 'Tébessa', homeDelivery: 850 },
+  { code: '13', name: 'Tlemcen', homeDelivery: 900 },
+  { code: '14', name: 'Tiaret', homeDelivery: 800 },
+  { code: '15', name: 'Tizi Ouzou', homeDelivery: 750 },
+  { code: '16', name: 'Alger', homeDelivery: 750 },
+  { code: '17', name: 'Djelfa', homeDelivery: 950 },
+  { code: '18', name: 'Jijel', homeDelivery: 750 },
+  { code: '19', name: 'Sétif', homeDelivery: 500 },
+  { code: '20', name: 'Saïda', homeDelivery: 800 },
+  { code: '21', name: 'Skikda', homeDelivery: 750 },
+  { code: '22', name: 'Sidi Bel Abbès', homeDelivery: 800 },
+  { code: '23', name: 'Annaba', homeDelivery: 800 },
+  { code: '24', name: 'Guelma', homeDelivery: 750 },
+  { code: '25', name: 'Constantine', homeDelivery: 750 },
+  { code: '26', name: 'Médéa', homeDelivery: 800 },
+  { code: '27', name: 'Mostaganem', homeDelivery: 800 },
+  { code: '28', name: "M'Sila", homeDelivery: 850 },
+  { code: '29', name: 'Mascara', homeDelivery: 800 },
+  { code: '30', name: 'Ouargla', homeDelivery: 950 },
+  { code: '31', name: 'Oran', homeDelivery: 800 },
+  { code: '32', name: 'El Bayadh', homeDelivery: 1100 },
+  { code: '33', name: 'Illizi', homeDelivery: null }, // Not served
+  { code: '34', name: 'Bordj Bou Arréridj', homeDelivery: 600 },
+  { code: '35', name: 'Boumerdès', homeDelivery: 750 },
+  { code: '36', name: 'El Tarf', homeDelivery: 800 },
+  { code: '37', name: 'Tindouf', homeDelivery: null }, // Not served
+  { code: '38', name: 'Tissemsilt', homeDelivery: 800 },
+  { code: '39', name: 'El Oued', homeDelivery: 950 },
+  { code: '40', name: 'Khenchela', homeDelivery: 800 },
+  { code: '41', name: 'Souk Ahras', homeDelivery: 750 },
+  { code: '42', name: 'Tipaza', homeDelivery: 750 },
+  { code: '43', name: 'Mila', homeDelivery: 750 },
+  { code: '44', name: 'Aïn Defla', homeDelivery: 750 },
+  { code: '45', name: 'Naâma', homeDelivery: 1100 },
+  { code: '46', name: 'Aïn Témouchent', homeDelivery: 800 },
+  { code: '47', name: 'Ghardaïa', homeDelivery: 950 },
+  { code: '48', name: 'Relizane', homeDelivery: 800 },
+  { code: '49', name: 'El M\'Ghair', homeDelivery: 950 },
+  { code: '50', name: 'El Meniaa', homeDelivery: 1000 },
+  { code: '51', name: 'Ouled Djellal', homeDelivery: 900 },
+  { code: '52', name: 'Bordj Baji Mokhtar', homeDelivery: null }, // Not served
+  { code: '53', name: 'Béni Abbès', homeDelivery: 1000 },
+  { code: '54', name: 'Timimoun', homeDelivery: 1450 },
+  { code: '55', name: 'Touggourt', homeDelivery: 950 },
+  { code: '56', name: 'Djanet', homeDelivery: null }, // Not served
+  { code: '57', name: 'In Salah', homeDelivery: 1600 },
+  { code: '58', name: 'In Guezzam', homeDelivery: 1600 },
+  { code: '59', name: 'Aflou', homeDelivery: 950 },
+  { code: '60', name: 'Aïn Oussera', homeDelivery: 950 },
+  { code: '61', name: 'Barika', homeDelivery: 800 },
+  { code: '62', name: 'Bir el-Ater', homeDelivery: 850 },
+  { code: '63', name: 'Bou Saâda', homeDelivery: 850 },
+  { code: '64', name: 'El Abiodh Sidi Cheikh', homeDelivery: 1100 },
+  { code: '65', name: 'El Aricha', homeDelivery: 1100 },
+  { code: '66', name: 'El Kantara', homeDelivery: 800 },
+  { code: '67', name: 'Ksar Chellala', homeDelivery: 800 },
+  { code: '68', name: 'Ksar El Boukhari', homeDelivery: 800 },
+  { code: '69', name: 'Messaad', homeDelivery: 950 },
 ]
+
+// Helper function to calculate delivery cost
+const calculateDeliveryCost = (wilayaCode, deliveryType) => {
+  const wilaya = wilayas.find(w => w.code === wilayaCode)
+  if (!wilaya || wilaya.homeDelivery === null) return null
+
+  // Office delivery is 200 DA less than home delivery
+  return deliveryType === 'home' ? wilaya.homeDelivery : wilaya.homeDelivery - 200
+}
 
 // Product colors
 const productColors = [
@@ -132,6 +141,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
 
     if (!formData.wilaya) {
       newErrors.wilaya = 'Please select your wilaya'
+    } else {
+      // Check if delivery is available for this wilaya
+      const deliveryCost = calculateDeliveryCost(formData.wilaya, formData.deliveryType)
+      if (deliveryCost === null) {
+        newErrors.wilaya = 'Sorry, delivery not available for this wilaya'
+      }
     }
 
     setErrors(newErrors)
@@ -151,7 +166,9 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     const colorName = inline && externalColor ? externalColor.name : productColors.find(c => c.id === formData.color)?.name
     const sizeName = inline && externalSize ? externalSize : 'M'
     const quantity = inline ? 1 : formData.quantity
-    const totalPrice = 3900 * quantity
+    const productTotal = 3900 * quantity
+    const deliveryCost = calculateDeliveryCost(formData.wilaya, formData.deliveryType)
+    const totalPrice = productTotal + deliveryCost
     const deliveryLabel = formData.deliveryType === 'office' ? 'Bureau (Office)' : 'Domicile (Home)'
 
     const orderDetails = {
@@ -162,10 +179,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
       phone: formData.phone,
       wilaya: `${selectedWilaya?.code} - ${selectedWilaya?.name}`,
       delivery_type: deliveryLabel,
+      delivery_cost: `${deliveryCost.toLocaleString()} DA`,
       product: 'Premium Hoodie + Track Pants Pack',
       color: colorName,
       size: sizeName,
       quantity: quantity,
+      product_total: `${productTotal.toLocaleString()} DA`,
       total_price: `${totalPrice.toLocaleString()} DA`,
       message: `New order received from ${formData.name}`,
     }
@@ -199,7 +218,9 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
   }
 
   const selectedColorData = productColors.find(c => c.id === formData.color)
-  const totalPrice = 3900 * formData.quantity
+  const productTotal = 3900 * formData.quantity
+  const deliveryCost = formData.wilaya ? calculateDeliveryCost(formData.wilaya, formData.deliveryType) : 0
+  const totalPrice = deliveryCost ? productTotal + deliveryCost : productTotal
 
   const formContent = (
     <>
@@ -253,8 +274,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
               >
                 <option value="">Select your wilaya</option>
                 {wilayas.map(w => (
-                  <option key={w.code} value={w.code}>
-                    {w.code} - {w.name}
+                  <option
+                    key={w.code}
+                    value={w.code}
+                    disabled={w.homeDelivery === null}
+                  >
+                    {w.code} - {w.name} {w.homeDelivery === null ? '(Not available)' : ''}
                   </option>
                 ))}
               </select>
@@ -283,6 +308,11 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
                 <span className="delivery-option-desc">Deliver to your door</span>
               </button>
             </div>
+            {formData.wilaya && deliveryCost !== null && (
+              <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+                Delivery cost: <strong>{deliveryCost.toLocaleString()} DA</strong>
+              </div>
+            )}
           </div>
 
           {/* Color Selector - only show in modal */}
@@ -346,6 +376,12 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
                 <span>Quantity</span>
                 <span>× {formData.quantity}</span>
               </div>
+              {formData.wilaya && deliveryCost !== null && (
+                <div className="summary-row">
+                  <span>Delivery ({formData.deliveryType === 'office' ? 'Bureau' : 'Domicile'})</span>
+                  <span>{deliveryCost.toLocaleString()} DA</span>
+                </div>
+              )}
               <div className="summary-row total">
                 <span>Total</span>
                 <span>{totalPrice.toLocaleString()} DA</span>
@@ -362,6 +398,37 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
           {submitStatus === 'error' && (
             <div className="status-message error">
               Failed to send order. Please try again.
+            </div>
+          )}
+
+          {/* Inline Total Preview */}
+          {inline && formData.wilaya && deliveryCost !== null && (
+            <div style={{
+              padding: '12px',
+              backgroundColor: '#f8f8f8',
+              borderRadius: '6px',
+              marginBottom: '12px',
+              fontSize: '15px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span>Product:</span>
+                <span>3,900 DA</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span>Delivery:</span>
+                <span>{deliveryCost.toLocaleString()} DA</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                paddingTop: '8px',
+                borderTop: '1px solid #ddd',
+                fontWeight: 'bold',
+                fontSize: '16px'
+              }}>
+                <span>Total:</span>
+                <span>{totalPrice.toLocaleString()} DA</span>
+              </div>
             </div>
           )}
 

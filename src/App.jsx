@@ -17,7 +17,7 @@ const galleryImages = [
 ]
 
 // Available sizes
-const sizes = ['S', 'M', 'L', 'XL']
+const sizes = ['S', 'M', 'L', 'XL', 'XXL']
 
 // WhatsApp configuration
 const WHATSAPP_NUMBER = '213798700447'
