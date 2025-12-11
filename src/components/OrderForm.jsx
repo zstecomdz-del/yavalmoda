@@ -91,8 +91,8 @@ const productColors = [
   { id: 'blue', name: 'Navy Blue', hex: '#1e3a5f' },
 ]
 
-// Google Apps Script endpoint
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEmnTwAjOBQjSveGuzEibmrs53da26pBRTQA1wZHxqh3dXJt0CvB9Luo342-Ht29KjKg/exec'
+// WhatsApp number for orders
+const WHATSAPP_NUMBER = '213671029839'
 
 function OrderForm({ onClose, inline = false, selectedColor: externalColor, selectedSize: externalSize }) {
   const { t } = useLanguage()
@@ -186,27 +186,39 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
       totalPrice: `${totalPrice.toLocaleString()} ${t('product.priceCurrency')}`
     }
 
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      })
+    // Build WhatsApp message
+    const message = `═══════════════════════
+طلب جديد - YA VALMODA
+═══════════════════════
 
-      // With no-cors mode, we can't read the response, but if no error thrown, assume success
-      setSubmitStatus('success')
-      if (!inline) {
-        setTimeout(() => {
-          if (onClose) onClose()
-        }, 2000)
-      }
-    } catch (error) {
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
+معلومات العميل:
+━━━━━━━━━━━━━━━
+الاسم: ${orderData.name}
+الهاتف: ${orderData.phone}
+الولاية: ${orderData.wilaya}
+التوصيل: ${orderData.deliveryType}
+سعر التوصيل: ${orderData.deliveryCost}
+
+تفاصيل المنتج:
+━━━━━━━━━━━━━━━
+المنتج: ${orderData.product}
+اللون: ${orderData.color}
+المقاس: ${orderData.size}
+الكمية: ${orderData.quantity}
+
+═══════════════════════
+المجموع: ${orderData.totalPrice}
+═══════════════════════`
+
+    // Open WhatsApp with the message
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+
+    setSubmitStatus('success')
+    setIsSubmitting(false)
+
+    if (!inline && onClose) {
+      setTimeout(() => onClose(), 2000)
     }
   }
 
