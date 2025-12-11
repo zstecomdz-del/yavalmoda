@@ -17,7 +17,7 @@ export const en = {
       part2: "Step Into Style"
     },
     subtitle: "Elevate your wardrobe with our premium collection. Designed for the modern man who values comfort without compromising on style.",
-    cta: "Explore Collection"
+    cta: "Buy Now"
   },
 
   // Video Section
