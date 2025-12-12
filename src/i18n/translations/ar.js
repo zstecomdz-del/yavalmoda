@@ -46,6 +46,14 @@ export const ar = {
       black: "أسود",
       grey: "رمادي",
       blue: "أزرق كحلي"
+    },
+    sizeGuide: {
+      title: "دليل المقاسات",
+      size: "المقاس",
+      weight: "الوزن المناسب",
+      height: "الطول المناسب",
+      weightUnit: "كغ",
+      heightUnit: "م"
     }
   },
 

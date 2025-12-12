@@ -19,7 +19,7 @@ const galleryImages = [
 ]
 
 // Available sizes
-const sizes = ['S', 'M', 'L', 'XL', 'XXL']
+const sizes = ['S', 'M', 'L', 'XL', '2XL']
 
 // WhatsApp configuration
 const WHATSAPP_NUMBER = '213671029839'
@@ -206,6 +206,47 @@ function App() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Size Guide Table */}
+            <div className="size-guide">
+              <span className="size-guide-title">{t('product.sizeGuide.title')}</span>
+              <table className="size-guide-table">
+                <thead>
+                  <tr>
+                    <th>{t('product.sizeGuide.size')}</th>
+                    <th>{t('product.sizeGuide.weight')}</th>
+                    <th>{t('product.sizeGuide.height')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>S</td>
+                    <td>48 – 54 {t('product.sizeGuide.weightUnit')}</td>
+                    <td>1.55 – 1.65 {t('product.sizeGuide.heightUnit')}</td>
+                  </tr>
+                  <tr>
+                    <td>M</td>
+                    <td>55 – 68 {t('product.sizeGuide.weightUnit')}</td>
+                    <td>1.60 – 1.72 {t('product.sizeGuide.heightUnit')}</td>
+                  </tr>
+                  <tr>
+                    <td>L</td>
+                    <td>69 – 80 {t('product.sizeGuide.weightUnit')}</td>
+                    <td>1.70 – 1.78 {t('product.sizeGuide.heightUnit')}</td>
+                  </tr>
+                  <tr>
+                    <td>XL</td>
+                    <td>81 – 92 {t('product.sizeGuide.weightUnit')}</td>
+                    <td>1.75 – 1.85 {t('product.sizeGuide.heightUnit')}</td>
+                  </tr>
+                  <tr>
+                    <td>2XL</td>
+                    <td>93 – 105 {t('product.sizeGuide.weightUnit')}</td>
+                    <td>1.80 – 1.90 {t('product.sizeGuide.heightUnit')}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Order Form - Integrated */}

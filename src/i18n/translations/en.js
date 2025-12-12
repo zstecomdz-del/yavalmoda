@@ -46,6 +46,14 @@ export const en = {
       black: "Black",
       grey: "Grey",
       blue: "Navy Blue"
+    },
+    sizeGuide: {
+      title: "Size Guide",
+      size: "Size",
+      weight: "Appropriate Weight",
+      height: "Appropriate Height",
+      weightUnit: "kg",
+      heightUnit: "m"
     }
   },
 
