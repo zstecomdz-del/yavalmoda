@@ -80,8 +80,8 @@ const calculateDeliveryCost = (wilayaCode, deliveryType) => {
   const wilaya = wilayas.find(w => w.code === wilayaCode)
   if (!wilaya || wilaya.homeDelivery === null) return null
 
-  // Office delivery is 200 DA less than home delivery
-  return deliveryType === 'home' ? wilaya.homeDelivery : wilaya.homeDelivery - 200
+  // Free delivery for all wilayas
+  return 0
 }
 
 // Product colors
@@ -171,7 +171,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
     const colorName = inline && externalColor ? t(`product.colors.${externalColor.id}`) : t(`product.colors.${formData.color}`)
     const sizeName = inline && externalSize ? externalSize : 'M'
     const quantity = inline ? 1 : formData.quantity
-    const productTotal = 3900 * quantity
+    const productTotal = 5900 * quantity
     const deliveryCost = calculateDeliveryCost(formData.wilaya, formData.deliveryType)
     const totalPrice = productTotal + deliveryCost
     const deliveryLabel = formData.deliveryType === 'office' ? t('orderForm.deliveryType.office.title') : t('orderForm.deliveryType.home.title')
@@ -248,7 +248,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
   }
 
   const selectedColorData = productColors.find(c => c.id === formData.color)
-  const productTotal = 3900 * formData.quantity
+  const productTotal = 5900 * formData.quantity
   const deliveryCost = formData.wilaya ? calculateDeliveryCost(formData.wilaya, formData.deliveryType) : 0
   const totalPrice = deliveryCost ? productTotal + deliveryCost : productTotal
 
@@ -398,8 +398,7 @@ function OrderForm({ onClose, inline = false, selectedColor: externalColor, sele
               <div className="summary-row">
                 <span>{t('orderForm.summary.packPrice')}</span>
                 <span className="price-with-promo">
-                  <span className="old-price">{t('product.priceOld')}</span>
-                  <span>{t('product.priceNew')} {t('product.priceCurrency')}</span>
+                                    <span>{t('product.priceNew')} {t('product.priceCurrency')}</span>
                 </span>
               </div>
               <div className="summary-row">

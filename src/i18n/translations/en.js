@@ -1,6 +1,6 @@
 export const en = {
   // Announcement Bar
-  announcement: "Livraison 69 Wilaya",
+  announcement: "Livraison GRATUITE - 69 Wilaya",
 
   // Navigation
   nav: {
@@ -36,8 +36,7 @@ export const en = {
     label: "Full Pack",
     name: "Premium Hoodie + Track Pants",
     description: "The perfect combination of style and comfort. Our premium color-block hoodie paired with sleek track pants featuring a signature white stripe. Crafted from high-quality materials for all-day comfort.",
-    priceOld: "4,500 DA",
-    priceNew: "3,900",
+    priceNew: "5,900",
     priceCurrency: "DA",
     priceNote: "Full Pack",
     colorLabel: "Color:",

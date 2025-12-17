@@ -83,7 +83,7 @@ function App() {
         <div className="hero-image">
           <img src="/images/all-colors.png" alt="YA VALMODA Collection" />
           <div className="hero-image-overlay">
-            <span>3,900 {t('product.priceCurrency')}</span>
+            <span>5,900 {t('product.priceCurrency')}</span>
           </div>
         </div>
       </section>
@@ -168,8 +168,7 @@ function App() {
             </p>
 
             <div className="product-price">
-              <span className="price-old">{t('product.priceOld')}</span>
-              <span className="price-amount">{t('product.priceNew')}</span>
+                            <span className="price-amount">{t('product.priceNew')}</span>
               <span className="price-currency">{t('product.priceCurrency')}</span>
               <span className="price-note">{t('product.priceNote')}</span>
             </div>

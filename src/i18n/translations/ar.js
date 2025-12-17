@@ -1,6 +1,6 @@
 export const ar = {
   // Announcement Bar
-  announcement: "التوصيل لـ 69 ولاية",
+  announcement: "التوصيل مجاني - 69 ولاية",
 
   // Navigation
   nav: {
@@ -36,8 +36,7 @@ export const ar = {
     label: "طقم كامل",
     name: "هودي وبنطال رياضي مميز",
     description: "المزيج المثالي بين الأناقة والراحة. هودي مميز بألوان متنوعة مع بنطال رياضي أنيق بخط أبيض مميز. مصنوع من مواد عالية الجودة لراحة طوال اليوم.",
-    priceOld: "4,500 دج",
-    priceNew: "3,900",
+    priceNew: "5,900",
     priceCurrency: "دج",
     priceNote: "طقم كامل",
     colorLabel: "اللون:",
